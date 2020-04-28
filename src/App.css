@@ -1,0 +1,25 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 62.5%;
+  /* width: 62.5%; */
+  /*1rem = 10px*/
+}
+
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #25054D;
+  font-family: Roboto, Helvetica, Arial, sans-serif;
+  text-rendering: optimizeLegibility !important;
+  -webkit-font-smoothing: antialiased !important;
+}
+
+input, button {
+  outline: 0;
+}
