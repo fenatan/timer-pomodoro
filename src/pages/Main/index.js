@@ -1,11 +1,15 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 import React from 'react';
-import './styles.css';
+import {
+  FiPlay,
+  FiPause,
+  FiSquare,
+  FiArrowDown,
+  FiArrowUp,
+} from 'react-icons/fi';
 
-import playImg from '../../assets/play.svg';
-import stopImg from '../../assets/stop.svg';
-import pauseImg from '../../assets/pause.svg';
+import './styles.css';
 
 export default class Main extends React.Component {
   state = {
@@ -14,23 +18,46 @@ export default class Main extends React.Component {
     sectionTime: 25,
     breakTime: 5,
     play: true,
-    reset: true,
   };
 
-  handleChangeSectionTime = (event) => {
-    this.setState({ sectionTime: event.target.value });
+  handleIncreaseSectionTime = () => {
+    const { sectionTime } = this.state;
+    this.setState({ sectionTime: sectionTime + 1 });
+  };
+
+  handleDecreaseSectionTime = () => {
+    const { sectionTime } = this.state;
+    if (sectionTime > 1) this.setState({ sectionTime: sectionTime - 1 });
+  };
+
+  handleIncreaseBreakTime = () => {
+    const { breakTime } = this.state;
+    this.setState({ breakTime: breakTime + 1 });
+  };
+
+  handleDecreaseBreakTime = () => {
+    const { breakTime } = this.state;
+    if (breakTime > 1) this.setState({ breakTime: breakTime - 1 });
   };
 
   handlePlay = () => {
-    const { play, reset, sectionTime } = this.state;
-
-    if (reset)
-      this.setState({ minutes: sectionTime, seconds: 0, reset: false });
+    const { play } = this.state;
 
     if (play) this.startClock();
     else this.stopClock();
 
     this.setState({ play: !play });
+  };
+
+  resetTimer = () => {
+    this.stopClock();
+    this.setState({
+      sectionTime: 25,
+      breakTime: 5,
+      minutes: 25,
+      seconds: 0,
+      play: true,
+    });
   };
 
   startClock() {
@@ -65,16 +92,21 @@ export default class Main extends React.Component {
           <section className="player">
             <div className="big">
               <div>
-                <img
-                  onClick={this.handlePlay}
-                  src={play ? playImg : pauseImg}
-                  alt="play"
-                />
+                {play ? (
+                  <FiPlay
+                    id="play"
+                    size={64}
+                    color="#fff"
+                    onClick={this.handlePlay}
+                  />
+                ) : (
+                  <FiPause size={64} color="#fff" onClick={this.handlePlay} />
+                )}
               </div>
             </div>
             <div className="small">
-              <div>
-                <img src={stopImg} alt="pause" />
+              <div onClick={this.resetTimer}>
+                <FiSquare size={16} color="#fff" />
               </div>
             </div>
           </section>
@@ -84,24 +116,37 @@ export default class Main extends React.Component {
             <div className="length section">
               <p>Duração da Seção</p>
               <div>
-                <input
-                  type="text"
-                  value={sectionTime}
-                  onChange={this.handleChangeSectionTime}
+                <FiArrowUp
+                  size={30}
+                  color="#fff"
+                  onClick={this.handleIncreaseSectionTime}
                 />
-                <small>min</small>
+                <input type="text" readOnly value={`${sectionTime} min`} />
+                <FiArrowDown
+                  size={30}
+                  color="#fff"
+                  onClick={this.handleDecreaseSectionTime}
+                />
               </div>
             </div>
             <div className="length break">
               <p>Duração da Pausa</p>
               <div>
-                <input type="text" value={breakTime} />
-                <small>min</small>
+                <FiArrowUp
+                  size={30}
+                  color="#fff"
+                  onClick={this.handleIncreaseBreakTime}
+                />
+                <input type="text" readOnly value={`${breakTime} min`} />
+                <FiArrowDown
+                  size={30}
+                  color="#fff"
+                  onClick={this.handleDecreaseBreakTime}
+                />
               </div>
             </div>
           </div>
         </div>
-        <a href="#/#">Reiniciar</a>
       </div>
     );
   }
