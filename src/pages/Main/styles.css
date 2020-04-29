@@ -1,4 +1,6 @@
 div.container .main {
+  max-width: 1020px;
+  margin: 0 auto;
   margin-top: 20px;
   display: flex;
   flex-direction: column;
