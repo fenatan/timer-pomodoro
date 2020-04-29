@@ -17,27 +17,30 @@ export default class Main extends React.Component {
     seconds: 0,
     sectionTime: 25,
     breakTime: 5,
+    changeSectionTime: false,
     play: true,
   };
 
   handleIncreaseSectionTime = () => {
-    const { sectionTime } = this.state;
-    this.setState({ sectionTime: sectionTime + 1 });
+    const { sectionTime, play } = this.state;
+    if (play)
+      this.setState({ sectionTime: sectionTime + 1, changeSectionTime: true });
   };
 
   handleDecreaseSectionTime = () => {
-    const { sectionTime } = this.state;
-    if (sectionTime > 1) this.setState({ sectionTime: sectionTime - 1 });
+    const { sectionTime, play } = this.state;
+    if (play && sectionTime > 1)
+      this.setState({ sectionTime: sectionTime - 1, changeSectionTime: true });
   };
 
   handleIncreaseBreakTime = () => {
-    const { breakTime } = this.state;
-    this.setState({ breakTime: breakTime + 1 });
+    const { breakTime, play } = this.state;
+    if (play) this.setState({ breakTime: breakTime + 1 });
   };
 
   handleDecreaseBreakTime = () => {
-    const { breakTime } = this.state;
-    if (breakTime > 1) this.setState({ breakTime: breakTime - 1 });
+    const { breakTime, play } = this.state;
+    if (play && breakTime > 1) this.setState({ breakTime: breakTime - 1 });
   };
 
   handlePlay = () => {
@@ -61,6 +64,13 @@ export default class Main extends React.Component {
   };
 
   startClock() {
+    const { sectionTime, changeSectionTime } = this.state;
+    if (changeSectionTime)
+      this.setState({
+        minutes: sectionTime,
+        seconds: 0,
+        changeSectionTime: false,
+      });
     this.interval = setInterval(() => {
       const { seconds, minutes } = this.state;
 
