@@ -11,13 +11,20 @@ import {
 
 import './styles.css';
 
+const DEFAULT_SECTION_TIME = 25;
+const DEFAULT_BREAK_TIME = 5;
+const DEFAULT_MINUTES = DEFAULT_SECTION_TIME;
+const DEFAULT_SECONDS = 0;
+
 export default class Main extends React.Component {
   state = {
-    minutes: 25,
-    seconds: 0,
-    sectionTime: 25,
-    breakTime: 5,
+    minutes: DEFAULT_MINUTES,
+    seconds: DEFAULT_SECONDS,
+    sectionTime: DEFAULT_SECTION_TIME,
+    breakTime: DEFAULT_BREAK_TIME,
     changeSectionTime: false,
+    changeBreakTime: false,
+    sectionTimer: true,
     play: true,
   };
 
@@ -35,18 +42,20 @@ export default class Main extends React.Component {
 
   handleIncreaseBreakTime = () => {
     const { breakTime, play } = this.state;
-    if (play) this.setState({ breakTime: breakTime + 1 });
+    if (play)
+      this.setState({ breakTime: breakTime + 1, changeBreakTime: true });
   };
 
   handleDecreaseBreakTime = () => {
     const { breakTime, play } = this.state;
-    if (play && breakTime > 1) this.setState({ breakTime: breakTime - 1 });
+    if (play && breakTime > 1)
+      this.setState({ breakTime: breakTime - 1, changeBreakTime: true });
   };
 
   handlePlay = () => {
     const { play } = this.state;
 
-    if (play) this.startClock();
+    if (play) this.timer();
     else this.stopClock();
 
     this.setState({ play: !play });
@@ -55,25 +64,37 @@ export default class Main extends React.Component {
   resetTimer = () => {
     this.stopClock();
     this.setState({
-      sectionTime: 25,
-      breakTime: 5,
-      minutes: 25,
-      seconds: 0,
+      sectionTime: DEFAULT_SECTION_TIME,
+      breakTime: DEFAULT_BREAK_TIME,
+      minutes: DEFAULT_MINUTES,
+      seconds: DEFAULT_SECONDS,
+      sectionTimer: true,
       play: true,
     });
   };
 
-  startClock() {
-    const { sectionTime, changeSectionTime } = this.state;
-    if (changeSectionTime)
+  timer() {
+    const {
+      sectionTime,
+      breakTime,
+      changeBreakTime,
+      changeSectionTime,
+      sectionTimer,
+    } = this.state;
+
+    if (
+      (changeSectionTime && sectionTimer) ||
+      (changeBreakTime && !sectionTimer)
+    )
       this.setState({
-        minutes: sectionTime,
+        minutes: sectionTimer ? sectionTime : breakTime,
         seconds: 0,
+        changeBreakTime: false,
         changeSectionTime: false,
       });
-    this.interval = setInterval(() => {
-      const { seconds, minutes } = this.state;
 
+    this.interval = setInterval(() => {
+      const { seconds, minutes, sectionTimer: currentSection } = this.state;
       if (seconds > 0) this.setState({ seconds: seconds - 1 });
       if (seconds === 0) {
         if (minutes > 0)
@@ -81,7 +102,13 @@ export default class Main extends React.Component {
             minutes: minutes - 1,
             seconds: 59,
           });
-        else clearInterval(this.interval);
+        else {
+          this.setState({
+            minutes: sectionTimer ? breakTime : sectionTime,
+            seconds: DEFAULT_SECONDS,
+            sectionTimer: !currentSection,
+          });
+        }
       }
     }, 1000);
   }
@@ -91,10 +118,18 @@ export default class Main extends React.Component {
   }
 
   render() {
-    const { minutes, seconds, sectionTime, breakTime, play } = this.state;
+    const {
+      minutes,
+      seconds,
+      sectionTime,
+      breakTime,
+      play,
+      sectionTimer,
+    } = this.state;
     return (
       <div className="container">
         <div className="main">
+          <h1>Tempo {sectionTimer ? 'da Seção' : 'de Descanso'}</h1>
           <span>
             {minutes < 10 ? `0${minutes}` : minutes}:
             {seconds < 10 ? `0${seconds}` : seconds}
