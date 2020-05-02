@@ -31,6 +31,13 @@ export default class Main extends React.Component {
     play: true,
   };
 
+  componentDidMount() {
+    const soundList = [endTimeSound, startSound, pauseSound, resetSound];
+    soundList.forEach((sound) => {
+      new Audio().src = sound;
+    });
+  }
+
   handleIncreaseSectionTime = () => {
     const { sectionTime, play } = this.state;
     if (play)
