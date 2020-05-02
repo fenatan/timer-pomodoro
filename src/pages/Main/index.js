@@ -82,26 +82,26 @@ export default class Main extends React.Component {
   };
 
   playSound(soundName) {
-    let sound;
+    if (this.sound) this.sound.pause();
 
     switch (soundName) {
       case 'pause':
-        sound = new Audio(pauseSound);
+        this.sound = new Audio(pauseSound);
         break;
       case 'play':
-        sound = new Audio(startSound);
+        this.sound = new Audio(startSound);
         break;
       case 'reset':
-        sound = new Audio(resetSound);
+        this.sound = new Audio(resetSound);
         break;
       case 'endTime':
-        sound = new Audio(endTimeSound);
+        this.sound = new Audio(endTimeSound);
         break;
       default:
         break;
     }
 
-    sound.play();
+    this.sound.play();
   }
 
   timer() {
