@@ -32,10 +32,10 @@ export default class Main extends React.Component {
   };
 
   componentDidMount() {
-    const soundList = [endTimeSound, startSound, pauseSound, resetSound];
-    soundList.forEach((sound) => {
-      new Audio().src = sound;
-    });
+    this.pauseSound = new Audio(pauseSound);
+    this.startSound = new Audio(startSound);
+    this.resetSound = new Audio(resetSound);
+    this.endTimeSound = new Audio(endTimeSound);
   }
 
   handleIncreaseSectionTime = () => {
@@ -93,16 +93,16 @@ export default class Main extends React.Component {
 
     switch (soundName) {
       case 'pause':
-        this.sound = new Audio(pauseSound);
+        this.sound = this.pauseSound;
         break;
       case 'play':
-        this.sound = new Audio(startSound);
+        this.sound = this.startSound;
         break;
       case 'reset':
-        this.sound = new Audio(resetSound);
+        this.sound = this.resetSound;
         break;
       case 'endTime':
-        this.sound = new Audio(endTimeSound);
+        this.sound = this.endTimeSound;
         break;
       default:
         break;
