@@ -1,5 +1,3 @@
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 import React from 'react';
 import {
   FiPlay,
@@ -8,6 +6,11 @@ import {
   FiArrowDown,
   FiArrowUp,
 } from 'react-icons/fi';
+
+import endTimeSound from '../../assets/sounds/end-time.wav';
+import startSound from '../../assets/sounds/start.wav';
+import pauseSound from '../../assets/sounds/pause.wav';
+import resetSound from '../../assets/sounds/reset.wav';
 
 import './styles.css';
 
@@ -55,13 +58,18 @@ export default class Main extends React.Component {
   handlePlay = () => {
     const { play } = this.state;
 
-    if (play) this.timer();
-    else this.stopClock();
-
+    if (play) {
+      this.playSound('play');
+      this.timer();
+    } else {
+      this.playSound('pause');
+      this.stopClock();
+    }
     this.setState({ play: !play });
   };
 
   resetTimer = () => {
+    this.playSound('reset');
     this.stopClock();
     this.setState({
       sectionTime: DEFAULT_SECTION_TIME,
@@ -72,6 +80,29 @@ export default class Main extends React.Component {
       play: true,
     });
   };
+
+  playSound(soundName) {
+    let sound;
+
+    switch (soundName) {
+      case 'pause':
+        sound = new Audio(pauseSound);
+        break;
+      case 'play':
+        sound = new Audio(startSound);
+        break;
+      case 'reset':
+        sound = new Audio(resetSound);
+        break;
+      case 'endTime':
+        sound = new Audio(endTimeSound);
+        break;
+      default:
+        break;
+    }
+
+    sound.play();
+  }
 
   timer() {
     const {
@@ -108,6 +139,7 @@ export default class Main extends React.Component {
             seconds: DEFAULT_SECONDS,
             sectionTimer: !currentSection,
           });
+          this.playSound('endTime');
         }
       }
     }, 1000);
