@@ -6,6 +6,7 @@ import {
   FiArrowDown,
   FiArrowUp,
 } from 'react-icons/fi';
+import { toast } from 'react-toastify';
 
 import endTimeSound from '../../assets/sounds/end-time.wav';
 import startSound from '../../assets/sounds/start.wav';
@@ -42,24 +43,28 @@ export default class Main extends React.Component {
     const { sectionTime, play } = this.state;
     if (play)
       this.setState({ sectionTime: sectionTime + 1, changeSectionTime: true });
+    else toast.warn('Para alterar o tempo, você precisa pausar o Timer!');
   };
 
   handleDecreaseSectionTime = () => {
     const { sectionTime, play } = this.state;
     if (play && sectionTime > 1)
       this.setState({ sectionTime: sectionTime - 1, changeSectionTime: true });
+    else toast.warn('Para alterar o tempo, você precisa pausar o Timer!');
   };
 
   handleIncreaseBreakTime = () => {
     const { breakTime, play } = this.state;
     if (play)
       this.setState({ breakTime: breakTime + 1, changeBreakTime: true });
+    else toast.warn('Para alterar o tempo, você precisa pausar o Timer!');
   };
 
   handleDecreaseBreakTime = () => {
     const { breakTime, play } = this.state;
     if (play && breakTime > 1)
       this.setState({ breakTime: breakTime - 1, changeBreakTime: true });
+    else toast.warn('Para alterar o tempo, você precisa pausar o Timer!');
   };
 
   handlePlay = () => {
@@ -107,7 +112,7 @@ export default class Main extends React.Component {
       default:
         break;
     }
-
+    this.sound.currentTime = 0;
     this.sound.play();
   }
 

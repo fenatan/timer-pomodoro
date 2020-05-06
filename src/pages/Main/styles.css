@@ -269,3 +269,14 @@ div.container .main .section-time .length div svg {
     font-weight: bold;
   }
 }
+
+.Toastify__toast-container {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.Toastify__toast {
+  background: #FF9F1C!important;
+  background: linear-gradient(270deg, #FF9F1C 0%, #FFC371 75%)!important;
+}
+
