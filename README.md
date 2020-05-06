@@ -8,6 +8,7 @@
 - CountDown Timer
 - User can change the minutes in session and break time before starting
 - Audio Notification
+- Toast Notification
 
 ### Running Locally
 ```sh
